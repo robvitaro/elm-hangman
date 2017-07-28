@@ -1,0 +1,794 @@
+var _user$project$Hangman$viewGameOver = function (state) {
+	var _p0 = state;
+	switch (_p0.ctor) {
+		case 'Start':
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h1,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(''),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+		case 'Playing':
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h1,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(''),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+		case 'Won':
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h1,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('won'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('You won!'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+		default:
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h1,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('lost'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('You lost!'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+	}
+};
+var _user$project$Hangman$viewMan = function (strikes) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$img,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$src(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(strikes),
+							'.gif')),
+					_1: {ctor: '[]'}
+				},
+				{ctor: '[]'}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Hangman$viewLostLetter = F2(
+	function (guessedLetters, letter) {
+		return A2(_elm_lang$core$List$member, letter, guessedLetters) ? A2(
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_elm_lang$core$String$fromChar(letter)),
+				_1: {ctor: '[]'}
+			}) : A2(
+			_elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('lost'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_elm_lang$core$String$fromChar(letter)),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Hangman$theLostWord = F2(
+	function (word, guessedLetters) {
+		var listOfLetters = _elm_lang$core$String$toList(word);
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$Hangman$viewLostLetter(guessedLetters),
+				listOfLetters));
+	});
+var _user$project$Hangman$aButton = F2(
+	function (msg, name) {
+		return A2(
+			_elm_lang$html$Html$button,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('primary'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(msg),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(name),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Hangman$letterGuessed = F2(
+	function (guessedLetters, letter) {
+		return A2(_elm_lang$core$List$member, letter, guessedLetters);
+	});
+var _user$project$Hangman$wholeWordGuessed = F2(
+	function (guessedLetters, wordLetters) {
+		return A2(
+			_elm_lang$core$List$all,
+			_user$project$Hangman$letterGuessed(guessedLetters),
+			wordLetters);
+	});
+var _user$project$Hangman$isItAStrike = F2(
+	function (letter, wordLetters) {
+		return A2(_elm_lang$core$List$member, letter, wordLetters) ? 0 : 1;
+	});
+var _user$project$Hangman$addGuessedLetter = F2(
+	function (letter, currentList) {
+		return _elm_lang$core$Set$toList(
+			_elm_lang$core$Set$fromList(
+				{ctor: '::', _0: letter, _1: currentList}));
+	});
+var _user$project$Hangman$theWord = F2(
+	function (word, guessedLetters) {
+		return A2(
+			_elm_lang$core$String$map,
+			function (c) {
+				return A2(_elm_lang$core$List$member, c, guessedLetters) ? c : _elm_lang$core$Native_Utils.chr('_');
+			},
+			word);
+	});
+var _user$project$Hangman$viewWord = F3(
+	function (word, guessedLetters, state) {
+		var _p1 = state;
+		switch (_p1.ctor) {
+			case 'Start':
+				return _elm_lang$html$Html$text('');
+			case 'Playing':
+				return A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(_user$project$Hangman$theWord, word, guessedLetters)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					});
+			case 'Won':
+				return A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('won'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(_user$project$Hangman$theWord, word, guessedLetters)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					});
+			default:
+				return A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(_user$project$Hangman$theLostWord, word, guessedLetters),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					});
+		}
+	});
+var _user$project$Hangman$createWordLetters = function (word) {
+	return _elm_lang$core$Set$toList(
+		_elm_lang$core$Set$fromList(
+			_elm_lang$core$String$toList(word)));
+};
+var _user$project$Hangman$randomWord = function (randNum) {
+	var _p2 = randNum;
+	switch (_p2) {
+		case 1:
+			return 'press';
+		case 2:
+			return 'nut';
+		case 3:
+			return 'noxious';
+		case 4:
+			return 'handy';
+		case 5:
+			return 'wilderness';
+		case 6:
+			return 'rain';
+		case 7:
+			return 'name';
+		case 8:
+			return 'heal';
+		case 9:
+			return 'carriage';
+		case 10:
+			return 'stage';
+		case 11:
+			return 'respect';
+		case 12:
+			return 'thank';
+		case 13:
+			return 'good';
+		case 14:
+			return 'piquant';
+		case 15:
+			return 'succinct';
+		case 16:
+			return 'red';
+		case 17:
+			return 'previous';
+		case 18:
+			return 'approval';
+		case 19:
+			return 'type';
+		case 20:
+			return 'degree';
+		case 21:
+			return 'pizzas';
+		case 22:
+			return 'fork';
+		case 23:
+			return 'regret';
+		case 24:
+			return 'dear';
+		case 25:
+			return 'courageous';
+		case 26:
+			return 'rely';
+		case 27:
+			return 'iron';
+		case 28:
+			return 'adorable';
+		case 29:
+			return 'messy';
+		case 30:
+			return 'across';
+		case 31:
+			return 'alcoholic';
+		case 32:
+			return 'crush';
+		case 33:
+			return 'waves';
+		case 34:
+			return 'bulb';
+		case 35:
+			return 'grease';
+		case 36:
+			return 'donkey';
+		case 37:
+			return 'rural';
+		case 38:
+			return 'change';
+		case 39:
+			return 'tax';
+		case 40:
+			return 'camera';
+		case 41:
+			return 'panicky';
+		case 42:
+			return 'television';
+		case 43:
+			return 'tense';
+		case 44:
+			return 'difficult';
+		case 45:
+			return 'check';
+		case 46:
+			return 'juggle';
+		case 47:
+			return 'disastrous';
+		case 48:
+			return 'automatic';
+		case 49:
+			return 'shade';
+		case 50:
+			return 'size';
+		case 51:
+			return 'linen';
+		case 52:
+			return 'frame';
+		case 53:
+			return 'sky';
+		case 54:
+			return 'wealthy';
+		case 55:
+			return 'move';
+		case 56:
+			return 'march';
+		case 57:
+			return 'fool';
+		case 58:
+			return 'hole';
+		case 59:
+			return 'jeans';
+		case 60:
+			return 'uttermost';
+		case 61:
+			return 'jam';
+		case 62:
+			return 'seashore';
+		case 63:
+			return 'strip';
+		case 64:
+			return 'like';
+		case 65:
+			return 'ignorant';
+		case 66:
+			return 'painful';
+		case 67:
+			return 'dull';
+		case 68:
+			return 'dad';
+		case 69:
+			return 'walking';
+		case 70:
+			return 'feigned';
+		case 71:
+			return 'superb';
+		case 72:
+			return 'business';
+		case 73:
+			return 'plate';
+		case 74:
+			return 'disturbed';
+		case 75:
+			return 'instrument';
+		case 76:
+			return 'connection';
+		case 77:
+			return 'sail';
+		case 78:
+			return 'steep';
+		case 79:
+			return 'endurable';
+		case 80:
+			return 'shirt';
+		case 81:
+			return 'apparel';
+		case 82:
+			return 'bells';
+		case 83:
+			return 'helpless';
+		case 84:
+			return 'absurd';
+		case 85:
+			return 'guess';
+		case 86:
+			return 'possible';
+		case 87:
+			return 'phobic';
+		case 88:
+			return 'ruin';
+		case 89:
+			return 'rub';
+		case 90:
+			return 'egg';
+		case 91:
+			return 'smooth';
+		case 92:
+			return 'offend';
+		case 93:
+			return 'horses';
+		case 94:
+			return 'oatmeal';
+		case 95:
+			return 'tangy';
+		case 96:
+			return 'advice';
+		case 97:
+			return 'gray';
+		case 98:
+			return 'intelligent';
+		case 99:
+			return 'fact';
+		case 100:
+			return 'mourn';
+		default:
+			return 'XX';
+	}
+};
+var _user$project$Hangman$initialModel = function (state) {
+	return {
+		word: '',
+		wordLetters: {ctor: '[]'},
+		guess: _elm_lang$core$Native_Utils.chr(' '),
+		guessedLetters: {ctor: '[]'},
+		strikes: 0,
+		gameState: state
+	};
+};
+var _user$project$Hangman$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {word: a, wordLetters: b, guess: c, guessedLetters: d, strikes: e, gameState: f};
+	});
+var _user$project$Hangman$Lost = {ctor: 'Lost'};
+var _user$project$Hangman$Won = {ctor: 'Won'};
+var _user$project$Hangman$Playing = {ctor: 'Playing'};
+var _user$project$Hangman$Start = {ctor: 'Start'};
+var _user$project$Hangman$DetermineGameState = {ctor: 'DetermineGameState'};
+var _user$project$Hangman$MakeGuess = function (a) {
+	return {ctor: 'MakeGuess', _0: a};
+};
+var _user$project$Hangman$guessLetterButton = F2(
+	function (guessedLetters, letter) {
+		var isDisabled = A2(_elm_lang$core$List$member, letter, guessedLetters);
+		return A2(
+			_elm_lang$html$Html$button,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onClick(
+					_user$project$Hangman$MakeGuess(letter)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$disabled(isDisabled),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_elm_lang$core$String$fromChar(letter)),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Hangman$viewGuessLetterButtons = F2(
+	function (guessedLetters, state) {
+		var allLetters = {
+			ctor: '::',
+			_0: _elm_lang$core$Native_Utils.chr('A'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$Native_Utils.chr('B'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Native_Utils.chr('C'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Native_Utils.chr('D'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Native_Utils.chr('E'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Native_Utils.chr('F'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Native_Utils.chr('G'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Native_Utils.chr('H'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$Native_Utils.chr('I'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$Native_Utils.chr('J'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$core$Native_Utils.chr('K'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$core$Native_Utils.chr('L'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$core$Native_Utils.chr('M'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$core$Native_Utils.chr('N'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$core$Native_Utils.chr('O'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$core$Native_Utils.chr('P'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$core$Native_Utils.chr('Q'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$core$Native_Utils.chr('R'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$core$Native_Utils.chr('S'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$core$Native_Utils.chr('T'),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$core$Native_Utils.chr('U'),
+																							_1: {
+																								ctor: '::',
+																								_0: _elm_lang$core$Native_Utils.chr('V'),
+																								_1: {
+																									ctor: '::',
+																									_0: _elm_lang$core$Native_Utils.chr('W'),
+																									_1: {
+																										ctor: '::',
+																										_0: _elm_lang$core$Native_Utils.chr('X'),
+																										_1: {
+																											ctor: '::',
+																											_0: _elm_lang$core$Native_Utils.chr('Y'),
+																											_1: {
+																												ctor: '::',
+																												_0: _elm_lang$core$Native_Utils.chr('Z'),
+																												_1: {ctor: '[]'}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		};
+		var buttons = A2(
+			_elm_lang$core$List$map,
+			_user$project$Hangman$guessLetterButton(guessedLetters),
+			allLetters);
+		var _p3 = state;
+		if (_p3.ctor === 'Start') {
+			return _elm_lang$html$Html$text('');
+		} else {
+			return A2(
+				_elm_lang$html$Html$ul,
+				{ctor: '[]'},
+				buttons);
+		}
+	});
+var _user$project$Hangman$NewWord = function (a) {
+	return {ctor: 'NewWord', _0: a};
+};
+var _user$project$Hangman$update = F2(
+	function (msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'NewGame':
+				return {
+					ctor: '_Tuple2',
+					_0: _user$project$Hangman$initialModel(_user$project$Hangman$Playing),
+					_1: A2(
+						_elm_lang$core$Random$generate,
+						_user$project$Hangman$NewWord,
+						A2(_elm_lang$core$Random$int, 1, 100))
+				};
+			case 'NewWord':
+				var newWord = _elm_lang$core$String$toUpper(
+					_user$project$Hangman$randomWord(_p4._0));
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							word: newWord,
+							wordLetters: _user$project$Hangman$createWordLetters(newWord)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'MakeGuess':
+				var _p5 = _p4._0;
+				return A3(
+					_ccapndave$elm_update_extra$Update_Extra$andThen,
+					_user$project$Hangman$update,
+					_user$project$Hangman$DetermineGameState,
+					{
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								guess: _p5,
+								guessedLetters: A2(_user$project$Hangman$addGuessedLetter, _p5, model.guessedLetters),
+								strikes: model.strikes + A2(_user$project$Hangman$isItAStrike, _p5, model.wordLetters)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					});
+			default:
+				var wordGuessed = A2(_user$project$Hangman$wholeWordGuessed, model.guessedLetters, model.wordLetters);
+				var state = wordGuessed ? _user$project$Hangman$Won : ((_elm_lang$core$Native_Utils.cmp(model.strikes, 6) > -1) ? _user$project$Hangman$Lost : _user$project$Hangman$Playing);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{gameState: state}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$Hangman$NewGame = {ctor: 'NewGame'};
+var _user$project$Hangman$viewNewGameButton = function (state) {
+	var _p6 = state;
+	switch (_p6.ctor) {
+		case 'Start':
+			return A2(_user$project$Hangman$aButton, _user$project$Hangman$NewGame, 'Let\'s play!');
+		case 'Playing':
+			return _elm_lang$html$Html$text('');
+		case 'Won':
+			return A2(_user$project$Hangman$aButton, _user$project$Hangman$NewGame, 'Play again?');
+		default:
+			return A2(_user$project$Hangman$aButton, _user$project$Hangman$NewGame, 'Try again?');
+	}
+};
+var _user$project$Hangman$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('content'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$header,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h1,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('HANGMAN'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _user$project$Hangman$viewMan(model.strikes),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('actionBox'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _user$project$Hangman$viewGameOver(model.gameState),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('actionBox'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _user$project$Hangman$viewNewGameButton(model.gameState),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('actionBox'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A3(_user$project$Hangman$viewWord, model.word, model.guessedLetters, model.gameState),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$Hangman$viewGuessLetterButtons, model.guessedLetters, model.gameState),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Hangman$main = _elm_lang$html$Html$program(
+	{
+		init: {
+			ctor: '_Tuple2',
+			_0: _user$project$Hangman$initialModel(_user$project$Hangman$Start),
+			_1: _elm_lang$core$Platform_Cmd$none
+		},
+		view: _user$project$Hangman$view,
+		update: _user$project$Hangman$update,
+		subscriptions: function (_p7) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
